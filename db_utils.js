@@ -12,7 +12,7 @@ function getConnection(username, password, database) {
 }
 
 async function getUsers(callback) {
-    const client = getConnection('postgres', 'root', 'mabase');
+    const client = getConnection(process.env.dbuser, process.env.dbpwd, 'mabase');
     try {
         await client.connect()
         console.log('Connexion réussie à PostgreSQL !')
@@ -36,7 +36,7 @@ getUsers((err, users) => {
 })
 
 async function insert_user(user) {
-    const client = getConnection('postgres', 'root', 'mabase');
+    const client = getConnection(process.env.dbuser, process.env.dbpwd, 'mabase');
 
     try {
         await client.connect()
