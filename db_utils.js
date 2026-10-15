@@ -1,26 +1,36 @@
 const pg = require('pg');
 
-const client = new pg.Client({
-    host: 'localhost',
-    database: 'mabase', 
-    user: 'postgres',
-    password: 'root',
-    port: 5432
-})
+function getConnection(username, password, database) {
+    const client = new pg.Client({
+        host: 'localhost',
+        database: database, 
+        user: username,
+        password: password,
+        port: 5432
+    })
+    return client;
+}
 
-async function getUsers() {
+async function getUsers(callback) {
+    const client = getConnection('postgres', 'root', 'mabase');
     try {
         await client.connect()
         console.log('Connexion réussie à PostgreSQL !')
 
         const result = await client.query('SELECT * FROM users;')
 
-        console.log(result.rows)
+        callback(null, result.rows)
     } catch (err) {
-        console.error('Erreur lors de la connexion ou de la requête :', err)
+        callback(err, null)
     } finally {
         await client.end()
     }
 }
 
-getUsers()
+getUsers((err, users) => {
+    if (err) {
+        console.error('Erreur lors de la récupération des utilisateurs :', err)
+    } else {
+        console.log('Utilisateurs récupérés :', users)
+    }
+})
