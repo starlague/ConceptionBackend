@@ -1,5 +1,4 @@
 const express = require('express')
-const { Pool } = require('pg')
 
 const app = express()
 const port = 3000
@@ -120,13 +119,4 @@ app.delete('/delete-task/:id', (req, res) => {
 
   tasks.splice(taskIndex, 1)
   res.json({ message: 'Tâche supprimée' })
-})
-
-// connexion à la BDD
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'nom_de_ta_bdd',
-  password: 'ton_mot_de_passe',
-  port: 5432,
 })
